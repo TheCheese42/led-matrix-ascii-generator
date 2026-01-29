@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="keywords" content="led matrix generator arduino">
+  <meta name="description" content="LED Matrix Generator for ASCII symbols">
+  <meta property="og:title" content="LED Matrix Generator ASCII">
+  <meta property="og:description" content="LED Matrix Generator for ASCII symbols">
+</head>
+
+<body id="body"><div class="content">
+  <style>
+    div.content {
+      width: 960px;
+      margin: auto;
+    }
+  </style>
+  <script>
+    async function generate() {
+      let text = document.getElementById("input-text").value;
+      let codeField = document.getElementById("codeField");
+      let response = await fetch(`/gen?t=${escape(text)}`)
+      response.text().then(function (text) {
+        codeField.innerText = text;
+      });
+    }
+  </script>
+  <h1>LED Matrix ASCII Generator</h1>
+  <br>
+  <p>Generate Arduino code (C++) to animate an 8x8 LED Matrix with scrolling text.</p>
+  <p>Only uppercase letters and digits, as well as some symbols are allowed:</p>
+  <p>{{ allowed_symbols }}</p>
+  <br><br>
+  <p>Enter your text here:</p>
+  <div style="display: inline-flex;"><input id="input-text" placeholder="Enter your text here"><button onclick="generate();">Generate</button></div>
+  <br><br>
+  <div style="display: flex;"><button onclick="navigator.clipboard.writeText(codeField.innerText)">Copy</button><button onclick="navigator.clipboard.writeText(codeField.innerText.replaceAll('\n', '').replaceAll(' ',  '').replaceAll('constuint8_t', 'const uint8_t ').replaceAll('constint', '\nconst int '))">Copy minified</button></div>
+  <div style="border-radius: 10px; padding: 10px; border-color: rgb(20, 20, 20); background-color: rgb(50, 50, 50); color: rgb(150, 150, 150)">
+  <code id="codeField" style="white-space: pre;"></code></div>
+</div></body>
